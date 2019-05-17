@@ -1,0 +1,111 @@
+    image_data = request.data
+    count = 1
+    path = "upload" + str(count) + ".png"
+    app.logger.info('Info')
+    imgdata = base64.b64decode(image_data)
+    with open(path, "wb") as fh:
+        fh.write(imgdata)
+
+    # Create a Cloud Storage client.
+    storage_client = storage.Client()
+
+    # Get the bucket that the file will be uploaded to.
+    bucket = storage_client.get_bucket(CLOUD_STORAGE_BUCKET)
+
+    # Create a new blob and upload the file's content.
+    blob = bucket.blob(path)
+    blog.upload_from_filename(path)
+   
+
+    # Make the blob publicly viewable.
+    blob.make_public()
+
+<div id="container">
+
+    <h1><a href="//webrtc.github.io/samples/" title="WebRTC samples homepage">WebRTC samples</a> <span>getUserMedia ⇒ canvas</span>
+    </h1>
+
+    <video playsinline autoplay></video>
+    <button>Take snapshot</button>
+    <canvas></canvas>
+
+    <p>Draw a frame from the video onto the canvas element using the <code>drawImage()</code> method.</p>
+
+    <p>The variables <code>canvas</code>, <code>video</code> and <code>stream</code> are in global scope, so you can
+        inspect them from the console.</p>
+
+    <a href="https://github.com/webrtc/samples/tree/gh-pages/src/content/getusermedia/canvas"
+       title="View source for this page on GitHub" id="viewSource">View source on GitHub</a>
+
+</div>
+<script type="text/javascript">
+    
+
+
+ 
+ function do_ajax(image) {
+        
+      }
+
+
+
+
+
+
+'use strict';
+
+// Put variables in global scope to make them available to the browser console.
+const video = document.querySelector('video');
+const canvas = window.canvas = document.querySelector('canvas');
+canvas.width = 480;
+canvas.height = 360;
+
+const button = document.querySelector('button');
+button.onclick = function() {
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+};
+
+const constraints = {
+  audio: false,
+  video: true
+};
+
+   
+
+
+function handleSuccess(stream) {
+  window.stream = stream; // make stream available to browser console
+  video.srcObject = stream;
+
+
+  setInterval(function(){ 
+
+
+
+    
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+    //var data = canvas.get()[0].toDataURL('image/jpeg', 1.0);
+    var data = canvas.toDataURL("image/png");
+    //newblob = dataURItoBlob(data);
+               var req = new XMLHttpRequest();
+        var result = document.getElementById('result');
+       
+       // req.open('POST', '/upload_photo', true);
+        //req.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+        //req.send(data);
+    
+
+  }, 250);
+
+}
+
+function handleError(error) {
+  console.log('navigator.getUserMedia error: ', error);
+}
+
+navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
+
+</script>
